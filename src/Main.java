@@ -134,8 +134,9 @@ public class Main {
                                         char c = text[j].charAt(text[j].length() - 2);
                                         char d = text[j].charAt(text[j].length() - 1);
                                         j++;
-                                        if (c == '?' || c == '.' || c == ' ')
+                                        if (c == '?' || c == '.' || c == ' ') {
                                             break;
+                                        }
                                         else if (d == ' ') {
                                             Matcher matcherNext = variant_3.matcher(text[i + 1]);
                                             if (matcherNext.find()) {
