@@ -42,12 +42,16 @@ public class Main {
                         //Текст вопроса
                         for (int i = last_line_number + 1; i < last_line_number + 15; i++) {//ищем текст вопроса начиная со строки следующей за номером вопроса
                             Matcher matcherText = questionText.matcher(text[i]);
-                            if (count == 63) {
+                            if (count == 1) {
                                 System.out.println();
                             }
                             if (matcherText.find()) {//если найдено совпадение
                                 StringBuilder question = new StringBuilder();//Собираем строку по кусочкам
-                                question.append(text[i], 0, text[i].length() - 1);
+                                if (text[i].charAt(text[i].length() - 1) == '-' || text[i].charAt(text[i].length() - 2) == '-') {
+                                    question.append(text[i], 0, text[i].length() - 1);
+                                } else {
+                                    question.append(text[i], 0, text[i].length());
+                                }
                                 if (!(text[i].charAt(text[i].length() - 2) == '.') && !(text[i].charAt(text[i].length() - 2) == '?') && !(text[i].charAt(text[i].length() - 2) == ' ')) {
                                     int j = i;
                                     while (!(text[j].charAt(text[j].length() - 2) == '.') || !(text[j].charAt(text[j].length() - 2) == '?') && !(text[j].charAt(text[j].length() - 2) == ' ')) {
@@ -57,19 +61,21 @@ public class Main {
                                         if (c == '?' || c == '.' || c == ' ') {
                                             break;
                                         } else if (d == ' ') {
-                                            String textiter = text[i + 1];
+
                                             Matcher matcherNext = variant_1.matcher(text[j]);
                                             if (matcherNext.find()) {
                                                 break;
                                             } else {
-                                                question.append(text[j], 0, text[j].length() - 1);
+                                                question.append(text[j], 0, text[j].length());
                                             }
+                                        } else if (d == '-' || c == '-') {
+                                            question.append(text[j], 0, text[j].length() - 2);
                                         } else {
-                                            question.append(text[j], 0, text[j].length() - 1);
+                                            question.append(text[j], 0, text[j].length());
                                         }
                                     }
                                 } else {
-                                    question.append(text[i], 0, text[i].length() - 1);
+                                    question.append(text[i], 0, text[i].length());
                                 }
                                 last_line_number = i;
                                 System.out.println(question);
@@ -98,10 +104,12 @@ public class Main {
                                             if (matcherNext.find()) {
                                                 break;
                                             } else {
-                                                question.append(text[j], 0, text[j].length() - 1);
+                                                question.append(text[j], 0, text[j].length());
                                             }
-                                        } else {
+                                        } else if (d == '-' || c == '-') {
                                             question.append(text[j], 0, text[j].length() - 1);
+                                        } else {
+                                            question.append(text[j], 0, text[j].length());
                                         }
                                     }
                                 }
@@ -115,6 +123,9 @@ public class Main {
 
                         for (int i = last_line_number; i < last_line_number + 15; i++) {
                             Matcher matcherVariant2 = variant_2.matcher(text[i]);
+                            if (count == 424) {
+                                System.out.println();
+                            }
                             if (matcherVariant2.find()) {
                                 StringBuilder question = new StringBuilder(text[i]);
                                 if (!(text[i].charAt(text[i].length() - 2) == '.') && !(text[i].charAt(text[i].length() - 2) == '?') && !(text[i].charAt(text[i].length() - 2) == ' ')) {
@@ -130,10 +141,12 @@ public class Main {
                                             if (matcherNext.find()) {
                                                 break;
                                             } else {
-                                                question.append(text[j], 0, text[j].length() - 1);
+                                                question.append(text[j], 0, text[j].length());
                                             }
-                                        } else {
+                                        } else if (d == '-' || c == '-') {
                                             question.append(text[j], 0, text[j].length() - 1);
+                                        } else {
+                                            question.append(text[j], 0, text[j].length());
                                         }
                                     }
                                 }
@@ -163,10 +176,12 @@ public class Main {
                                             if (matcherNext.find()) {
                                                 break;
                                             } else {
-                                                question.append(text[j], 0, text[j].length() - 1);
+                                                question.append(text[j], 0, text[j].length());
                                             }
-                                        } else {
+                                        } else if (d == '-' || c == '-') {
                                             question.append(text[j], 0, text[j].length() - 1);
+                                        } else {
+                                            question.append(text[j], 0, text[j].length());
                                         }
                                     }
                                 }
@@ -180,10 +195,10 @@ public class Main {
 
                         for (int i = last_line_number + 1; i < last_line_number + 15; i++) {
                             Matcher matcherVariant4 = variant_4.matcher(text[i]);
-                            if (count == 262) {
+                            Matcher matcher_dot_v4 = variant_4_dot.matcher(text[i]);
+                            if (count == 2) {
                                 System.out.println();
                             }
-                            Matcher matcher_dot_v4 = variant_4_dot.matcher(text[i]);
                             if (matcherVariant4.find() || matcher_dot_v4.find()) {
                                 StringBuilder question = new StringBuilder(text[i]);
                                 if (!(text[i].charAt(text[i].length() - 2) == '.') && !(text[i].charAt(text[i].length() - 2) == '?') && !(text[i].charAt(text[i].length() - 2) == ' ')) {
@@ -194,14 +209,16 @@ public class Main {
                                         j++;
                                         if (c == '?' || c == '.' || c == ' ')
                                             break;
-                                        else if (d == ' ') {
+                                        else if (d == ' ' || c == '-') {
                                             if (text[j].charAt(0) == ' ') {
                                                 break;
                                             } else {
-                                                question.append(text[j], 0, text[j].length() - 1);
+                                                question.append(text[j], 0, text[j].length());
                                             }
-                                        } else {
+                                        } else if (d == '-') {
                                             question.append(text[j], 0, text[j].length() - 1);
+                                        } else {
+                                            question.append(text[j], 0, text[j].length());
                                         }
                                     }
                                 }
