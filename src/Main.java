@@ -42,19 +42,29 @@ public class Main {
                         //Текст вопроса
                         for (int i = last_line_number + 1; i < last_line_number + 15; i++) {//ищем текст вопроса начиная со строки следующей за номером вопроса
                             Matcher matcherText = questionText.matcher(text[i]);
-
+                            if (count == 63) {
+                                System.out.println();
+                            }
                             if (matcherText.find()) {//если найдено совпадение
                                 StringBuilder question = new StringBuilder();//Собираем строку по кусочкам
                                 question.append(text[i], 0, text[i].length() - 1);
                                 if (!(text[i].charAt(text[i].length() - 2) == '.') && !(text[i].charAt(text[i].length() - 2) == '?') && !(text[i].charAt(text[i].length() - 2) == ' ')) {
                                     int j = i;
                                     while (!(text[j].charAt(text[j].length() - 2) == '.') || !(text[j].charAt(text[j].length() - 2) == '?') && !(text[j].charAt(text[j].length() - 2) == ' ')) {
-                                        j++;
                                         char c = text[j].charAt(text[j].length() - 2);
                                         char d = text[j].charAt(text[j].length() - 1);
-                                        if (c == '?' || c == '.' || c == ' ' || d == ' ')
+                                        j++;
+                                        if (c == '?' || c == '.' || c == ' ') {
                                             break;
-                                        else {
+                                        } else if (d == ' ') {
+                                            String textiter = text[i + 1];
+                                            Matcher matcherNext = variant_1.matcher(text[j]);
+                                            if (matcherNext.find()) {
+                                                break;
+                                            } else {
+                                                question.append(text[j], 0, text[j].length() - 1);
+                                            }
+                                        } else {
                                             question.append(text[j], 0, text[j].length() - 1);
                                         }
                                     }
@@ -77,12 +87,20 @@ public class Main {
                                 if (!(text[i].charAt(text[i].length() - 2) == '.') && !(text[i].charAt(text[i].length() - 2) == '?') && !(text[i].charAt(text[i].length() - 2) == ' ')) {
                                     int j = i;
                                     while (!(text[j].charAt(text[j].length() - 2) == '.') || !(text[j].charAt(text[j].length() - 2) == '?') && !(text[j].charAt(text[j].length() - 2) == ' ')) {
-                                        j++;
                                         char c = text[j].charAt(text[j].length() - 2);
                                         char d = text[j].charAt(text[j].length() - 1);
-                                        if (c == '?' || c == '.' || c == ' ' || d == ' ')
+                                        j++;
+                                        if (c == '?' || c == '.' || c == ' ')
                                             break;
-                                        else {
+
+                                        else if (d == ' ') {
+                                            Matcher matcherNext = variant_2.matcher(text[i + 1]);
+                                            if (matcherNext.find()) {
+                                                break;
+                                            } else {
+                                                question.append(text[j], 0, text[j].length() - 1);
+                                            }
+                                        } else {
                                             question.append(text[j], 0, text[j].length() - 1);
                                         }
                                     }
@@ -102,12 +120,19 @@ public class Main {
                                 if (!(text[i].charAt(text[i].length() - 2) == '.') && !(text[i].charAt(text[i].length() - 2) == '?') && !(text[i].charAt(text[i].length() - 2) == ' ')) {
                                     int j = i;
                                     while (!(text[j].charAt(text[j].length() - 2) == '.') || !(text[j].charAt(text[j].length() - 2) == '?') && !(text[j].charAt(text[j].length() - 2) == ' ')) {
-                                        j++;
                                         char c = text[j].charAt(text[j].length() - 2);
                                         char d = text[j].charAt(text[j].length() - 1);
-                                        if (c == '?' || c == '.' || c == ' ' || d == ' ')
+                                        j++;
+                                        if (c == '?' || c == '.' || c == ' ')
                                             break;
-                                        else {
+                                        else if (d == ' ') {
+                                            Matcher matcherNext = variant_3.matcher(text[i + 1]);
+                                            if (matcherNext.find()) {
+                                                break;
+                                            } else {
+                                                question.append(text[j], 0, text[j].length() - 1);
+                                            }
+                                        } else {
                                             question.append(text[j], 0, text[j].length() - 1);
                                         }
                                     }
@@ -128,12 +153,19 @@ public class Main {
                                 if (!(text[i].charAt(text[i].length() - 2) == '.') && !(text[i].charAt(text[i].length() - 2) == '?') && !(text[i].charAt(text[i].length() - 2) == ' ')) {
                                     int j = i;
                                     while (!(text[j].charAt(text[j].length() - 2) == '.') || !(text[j].charAt(text[j].length() - 2) == '?') && !(text[j].charAt(text[j].length() - 2) == ' ')) {
-                                        j++;
                                         char c = text[j].charAt(text[j].length() - 2);
                                         char d = text[j].charAt(text[j].length() - 1);
-                                        if (c == '?' || c == '.' || c == ' ' || d == ' ')
+                                        j++;
+                                        if (c == '?' || c == '.' || c == ' ')
                                             break;
-                                        else {
+                                        else if (d == ' ') {
+                                            Matcher matcherNext = variant_4.matcher(text[i + 1]);
+                                            if (matcherNext.find()) {
+                                                break;
+                                            } else {
+                                                question.append(text[j], 0, text[j].length() - 1);
+                                            }
+                                        } else {
                                             question.append(text[j], 0, text[j].length() - 1);
                                         }
                                     }
@@ -148,8 +180,8 @@ public class Main {
 
                         for (int i = last_line_number + 1; i < last_line_number + 15; i++) {
                             Matcher matcherVariant4 = variant_4.matcher(text[i]);
-                            if(count == 1){
-                                System.out.println("");
+                            if (count == 262) {
+                                System.out.println();
                             }
                             Matcher matcher_dot_v4 = variant_4_dot.matcher(text[i]);
                             if (matcherVariant4.find() || matcher_dot_v4.find()) {
@@ -160,9 +192,15 @@ public class Main {
                                         char c = text[j].charAt(text[j].length() - 2);
                                         char d = text[j].charAt(text[j].length() - 1);
                                         j++;
-                                        if (c == '?' || c == '.' || c == ' ' || d == ' ')
+                                        if (c == '?' || c == '.' || c == ' ')
                                             break;
-                                        else {
+                                        else if (d == ' ') {
+                                            if (text[j].charAt(0) == ' ') {
+                                                break;
+                                            } else {
+                                                question.append(text[j], 0, text[j].length() - 1);
+                                            }
+                                        } else {
                                             question.append(text[j], 0, text[j].length() - 1);
                                         }
                                     }
