@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Main {
+public class Parser{
     public static void main(String[] args) throws IOException {
 
 
@@ -42,7 +42,9 @@ public class Main {
                         //Текст вопроса
                         for (int i = last_line_number + 1; i < last_line_number + 15; i++) {//ищем текст вопроса начиная со строки следующей за номером вопроса
                             Matcher matcherText = questionText.matcher(text[i]);
-
+                            if (count == 16){
+                                System.out.println();
+                            }
                             if (matcherText.find()) {//если найдено совпадение
                                 StringBuilder question = new StringBuilder();//Собираем строку по кусочкам
                                 if (text[i].charAt(text[i].length() - 1) == '-' || text[i].charAt(text[i].length() - 2) == '-') {
@@ -67,7 +69,9 @@ public class Main {
                                                 question.append(text[j], 0, text[j].length());
                                             }
                                         } else if (d == '-' || c == '-') {
-                                            question.append(text[j], 0, text[j].length() - 2);
+                                            if(c == ' '){
+                                                question.append(text[j], 0, text[j].length() - 2);
+                                            }
                                         } else {
                                             question.append(text[j], 0, text[j].length());
                                         }
