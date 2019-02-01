@@ -47,31 +47,7 @@ public class Parser {
                     if (matcher.find()) {//если найдено ключевое слово "Вопрос"
                         last_line_number = textLines;//номер последней обработанной строки
                         numberCount++;
-                        /*String textTest;
-                        if(text[textLines].substring(matcher.start(), matcher.end() - 1).charAt(text[textLines].substring(matcher.start(), matcher.end() - 1).length()-1) != ' '){
-                            textTest = text[textLines].substring(matcher.start(), matcher.end() - 1);
-                        }else{
-                            textTest = text[textLines].substring(matcher.start(), matcher.end() - 2);
-                        }
-                        if (textTest.charAt(textTest.length() - 1) == ' ') {
-                            if (count >= 10 && count < 100) {
-                                number = Integer.parseInt(text[textLines].substring(matcher.end() - 5, matcher.end() - 3));
-                            } else if (count >= 100) {
-                                number = Integer.parseInt(text[textLines].substring(matcher.end() - 6, matcher.end() - 3));
-                            } else {
-                                number = Integer.parseInt(text[textLines].substring(matcher.end() - 4, matcher.end() - 3));
-                            }
-
-                        } else {
-                            if (count >= 10 && count < 100) {
-                                number = Integer.parseInt(text[textLines].substring(matcher.end() - 4, matcher.end() - 2));
-                            } else if (count >= 100) {
-                                number = Integer.parseInt(text[textLines].substring(matcher.end() - 4, matcher.end() - 2));
-                            } else {
-                                number = Integer.parseInt(text[textLines].substring(matcher.end() - 3, matcher.end() - 2));
-                            }
-                        }
-//                        System.out.println(number);*/
+                        
                         //Текст вопроса
                         for (int i = last_line_number + 1; i < last_line_number + 15; i++) {//ищем текст вопроса начиная со строки следующей за номером вопроса
                             Matcher matcherText = questionText.matcher(text[i]);
