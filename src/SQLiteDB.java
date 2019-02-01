@@ -19,11 +19,11 @@ public class SQLiteDB {
             e.printStackTrace();
         }
     }
-    public void InsertItem(int NUMBER, String Text, String Variant_1, String Variant_2, String Variant_3, String Variant_4, String RVAR, int Image_ID){
+    public void InsertItem(int number, String Text, String Variant_1, String Variant_2, String Variant_3, String Variant_4){
         try {
             statement = c.createStatement();
-            String sql = "INSERT INTO exam (NUMBER,TEXT,VAR1,VAR2,VAR3,VAR4,RVAR,IMAGE_ID) " +
-                    "VALUES ("+ NUMBER +","+ Text +","+ Variant_1 +","+ Variant_2 +","+ Variant_3 +","+ Variant_4 +","+ RVAR +",NULL);";
+            String sql = "INSERT INTO exam (ID, TEXT,VAR1,VAR2,VAR3,VAR4) " +
+                    "VALUES ("+ number + ",\""+ Text +"\",\""+ Variant_1 +"\",\""+ Variant_2 +"\",\""+ Variant_3 +"\",\""+ Variant_4 +"\");";
             statement.executeUpdate(sql);
             statement.close();
             c.commit();

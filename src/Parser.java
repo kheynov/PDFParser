@@ -1,9 +1,12 @@
+import com.sun.org.apache.xerces.internal.impl.xpath.regex.Match;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.pdfbox.text.PDFTextStripperByArea;
+import org.sqlite.core.DB;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,11 +22,14 @@ public class Parser {
                 stripper.setSortByPosition(true);//сортировка по порядку
 
                 PDFTextStripper tStripper = new PDFTextStripper();
-
+                SQLiteDB database = new SQLiteDB();
+                database.OpenDatabase();
+                System.out.println("Database opened successfully");
                 String pdfFileInText = tStripper.getText(document);
 
                 String[] text = pdfFileInText.split("\\r?\\n");
-                Pattern questionNumber = Pattern.compile("Вопрос .+\\(");//Ищем совпадение от слова вопрос до конца строки
+                Pattern question_exp = Pattern.compile("Вопрос .+\\(");//Ищем совпадение от слова вопрос до конца строки
+
                 Pattern questionText = Pattern.compile("^.+$");//Текст вопроса от начала строки до переноса строки
                 Pattern variant_1 = Pattern.compile("a\\).+$");//1 вариант ответа
                 Pattern variant_2 = Pattern.compile("b\\).+$");//2 вариант ответа
@@ -32,13 +38,40 @@ public class Parser {
                 Pattern variant_4 = Pattern.compile("d\\).+$");//5 вариант ответа, если оканчивается переносом строки
 
                 int last_line_number;//номер последней строки
-                int count = 0;
+                int numberCount = 0;
+                String var1 = "", var2 = "", var3 = "", var4 = "", DBtext = "";
+                System.out.println("Reading pdf....");
                 for (int textLines = 0; textLines < text.length; textLines++) {//перебор всех строк документа
-                    Matcher matcher = questionNumber.matcher(text[textLines]);
-                    if (matcher.find()) {//если найдено ключевое слово "Вопрос"
-                        System.out.println(text[textLines].substring(matcher.start(), matcher.end() - 2));//выводим номер вопроса
-                        last_line_number = textLines;//номер последней обработанной строки
+                    Matcher matcher = question_exp.matcher(text[textLines]);
 
+                    if (matcher.find()) {//если найдено ключевое слово "Вопрос"
+                        last_line_number = textLines;//номер последней обработанной строки
+                        numberCount++;
+                        /*String textTest;
+                        if(text[textLines].substring(matcher.start(), matcher.end() - 1).charAt(text[textLines].substring(matcher.start(), matcher.end() - 1).length()-1) != ' '){
+                            textTest = text[textLines].substring(matcher.start(), matcher.end() - 1);
+                        }else{
+                            textTest = text[textLines].substring(matcher.start(), matcher.end() - 2);
+                        }
+                        if (textTest.charAt(textTest.length() - 1) == ' ') {
+                            if (count >= 10 && count < 100) {
+                                number = Integer.parseInt(text[textLines].substring(matcher.end() - 5, matcher.end() - 3));
+                            } else if (count >= 100) {
+                                number = Integer.parseInt(text[textLines].substring(matcher.end() - 6, matcher.end() - 3));
+                            } else {
+                                number = Integer.parseInt(text[textLines].substring(matcher.end() - 4, matcher.end() - 3));
+                            }
+
+                        } else {
+                            if (count >= 10 && count < 100) {
+                                number = Integer.parseInt(text[textLines].substring(matcher.end() - 4, matcher.end() - 2));
+                            } else if (count >= 100) {
+                                number = Integer.parseInt(text[textLines].substring(matcher.end() - 4, matcher.end() - 2));
+                            } else {
+                                number = Integer.parseInt(text[textLines].substring(matcher.end() - 3, matcher.end() - 2));
+                            }
+                        }
+//                        System.out.println(number);*/
                         //Текст вопроса
                         for (int i = last_line_number + 1; i < last_line_number + 15; i++) {//ищем текст вопроса начиная со строки следующей за номером вопроса
                             Matcher matcherText = questionText.matcher(text[i]);
@@ -76,7 +109,8 @@ public class Parser {
                                     question.append(text[i], 0, text[i].length());
                                 }
                                 last_line_number = i;
-                                System.out.println(question);
+                                DBtext = question.toString();
+//                                System.out.println(question);
                                 break;
                             }
                         }
@@ -116,7 +150,8 @@ public class Parser {
                                     }
                                 }
                                 last_line_number = i;
-                                System.out.println(question);
+                                var1 = question.toString();
+//                                System.out.println(question);
                                 break;
                             }
                         }
@@ -140,8 +175,7 @@ public class Parser {
                                         j++;
                                         if (c == '?' || c == '.' || c == ' ') {
                                             break;
-                                        }
-                                        else if (d == ' ') {
+                                        } else if (d == ' ') {
                                             Matcher matcherNext = variant_3.matcher(text[i + 1]);
                                             if (matcherNext.find()) {
                                                 break;
@@ -157,7 +191,8 @@ public class Parser {
                                 }
 
                                 last_line_number = i;
-                                System.out.println(question);
+                                var2 = question.toString();
+//                                System.out.println(question);
                                 break;
                             }
                         }
@@ -196,7 +231,8 @@ public class Parser {
                                     }
                                 }
                                 last_line_number = i;
-                                System.out.println(question);
+                                var3 = question.toString();
+//                                System.out.println(question);
                                 break;
                             }
                         }
@@ -235,14 +271,28 @@ public class Parser {
                                         }
                                     }
                                 }
-                                System.out.println(question);
+                                var4 = question.toString();
+//                                System.out.println(question);
                                 break;
                             }
                         }
-                        System.out.println("=================================================");
-                        count++;
+                        /*System.out.println(DBtext);
+                        System.out.println(var1);
+                        System.out.println(var2); //Отладочный вывод значений
+                        System.out.println(var3);
+                        System.out.println(var4);*/
+                        try {
+                            database.InsertItem(numberCount, DBtext, var1, var2, var3, var4);
+                        }catch (Exception e){
+                            database.InsertItem(numberCount, "","", "", "","");
+                            System.out.println(Arrays.toString(e.getStackTrace()));
+                        }
+//                        System.out.println("=================================================");
                     }
                 }
+                System.out.println("Writing successful, closing streams");
+                database.CloseStreams();
+                System.out.println("Streams closed, finishing");
             }
         }
     }
